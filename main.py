@@ -1,5 +1,5 @@
 #Python file
-import csv
+import openpyxl as pxl
 print('Welcome to EdFusion!')
 userId = int(input('Enter your user Id'))
 Id = 348
@@ -14,10 +14,17 @@ def marks():
     markslist = [Physics, Chemistry, Mathametics, English, Computer_Science]
     return markslist
 
+#Appending data to an Excel workbook
+def appendData(x):
+    wb = pxl.Workbook('Data.xlsx')
+    wb.create_sheet('Periodic Test - 1')
+    wb['Periodic Test - 1'].append(roll, x)
+    wb.save()
+
 if userId==348:
     print('Logged in succesfully!')
     roll = int(input('Enter student roll no : '))
     #Function call for input of marks
-    print(marks())
+    appendData(marks())
 else:
     print('Invalid credentials')
