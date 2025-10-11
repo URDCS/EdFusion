@@ -4,7 +4,7 @@ def connect_to_database():
     try:
         mydb = mysql.connector.connect(
             host="localhost", 
-            user="your_username",  # Replace with your MySQL username
+            user="root",  
             password="your_password",  # Replace with your MySQL password
             database="school" 
         )
@@ -16,25 +16,59 @@ def connect_to_database():
 
 def extract_data(connection):
     """Extracts and prints data from a table."""
-    if connection:
-        cursor = connection.cursor()
-        try:
-           T1 =  cursor.execute("SELECT * FROM students")  # Replace 'students' with your table name
-           T2 =  cursor.execute("SELECT * FROM students")
-           T3 =  cursor.execute("SELECT * FROM students")
-           T4 =  cursor.execute("SELECT * FROM students")
-           
-            results = cursor.fetchall()
-            if results:
-                print("Data from the table:")
-                for row in results:
-                    print(row)  # Print each row of data
-            else:
-                print("No data found in the table.")
-        except mysql.connector.Error as err:
-            print(f"Error extracting data: {err}")
-        finally:
-            cursor.close()
+   if connection:
+    cursor = connection.cursor()
+    try:
+        cursor.execute("SELECT * FROM 11A")
+        results_11A = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM 11B")
+        results_11B = cursor.fetchall()
+        
+        cursor.execute("SELECT * FROM 12A")
+        results_12A = cursor.fetchall()
+        
+        cursor.execute("SELECT * FROM 12B")
+        results_12B = cursor.fetchall()
+
+        # --- Data Processing and Printing ---
+        
+        # Print 11A data
+        print("\n--- Data from table: 11A ---")
+        if results_11A:
+            for row in results_11A:
+                print(row)
+        else:
+            print("No data found in 11A.")
+
+        # Print 11B data
+        print("\n--- Data from table: 11B ---")
+        if results_11B:
+            for row in results_11B:
+                print(row)
+        else:
+            print("No data found in 11B.")
+
+        # Print 12A data
+        print("\n--- Data from table: 12A ---")
+        if results_12A:
+            for row in results_12A:
+                print(row)
+        else:
+            print("No data found in 12A.")
+
+        # Print 12B data
+        print("\n--- Data from table: 12B ---")
+        if results_12B:
+            for row in results_12B:
+                print(row)
+        else:
+            print("No data found in 12B.")
+
+    except Exception as err: 
+        print(f"Error extracting data: {err}")
+    finally:
+        cursor.close()
 
 def main():
     """Main function to connect and extract data."""
