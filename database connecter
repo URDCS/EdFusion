@@ -1,13 +1,12 @@
 import mysql.connector
 
 def connect_to_database():
-    """Connects to a MySQL database."""
     try:
         mydb = mysql.connector.connect(
-            host="localhost",  # Replace with your MySQL host
+            host="localhost", 
             user="your_username",  # Replace with your MySQL username
             password="your_password",  # Replace with your MySQL password
-            database="your_database_name"  # Replace with your database name
+            database="school" 
         )
         print("Successfully connected to the database!")
         return mydb
@@ -20,7 +19,11 @@ def extract_data(connection):
     if connection:
         cursor = connection.cursor()
         try:
-            cursor.execute("SELECT * FROM students")  # Replace 'students' with your table name
+           T1 =  cursor.execute("SELECT * FROM students")  # Replace 'students' with your table name
+           T2 =  cursor.execute("SELECT * FROM students")
+           T3 =  cursor.execute("SELECT * FROM students")
+           T4 =  cursor.execute("SELECT * FROM students")
+           
             results = cursor.fetchall()
             if results:
                 print("Data from the table:")
