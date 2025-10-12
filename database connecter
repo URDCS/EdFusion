@@ -1,12 +1,14 @@
 import mysql.connector
 
 def connect_to_database():
+    """Establishes a connection to the MySQL database."""
     try:
         mydb = mysql.connector.connect(
             host="localhost", 
             user="root",  
-            password="your_password",  # Replace with your MySQL password
-            database="school" )
+            password="your_password", 
+            database="school"
+        )
         print("Successfully connected to the database!")
         return mydb
     except mysql.connector.Error as err:
@@ -14,52 +16,55 @@ def connect_to_database():
         return None
 
 def extract_data(connection):
-    """Extracts and prints data from a table."""
-   if connection:
-    cursor = connection.cursor()
-    print("choose number to display table : 1 - 11A, 2 - 11B, 3 - 12A, 4 - 12B")
-    choice = int(input("enter your choice"))
-    try:
-        if choice == 1:
-            cursor.execute("SELECT * FROM 11A")
-            results_11A = cursor.fetchall()
-            print("\n--- Data from table: 11A ---")
-            if results_11A:
-                for row in results_11A:
-                print(row)
+    """Extracts and prints data from a selected table."""
+    if connection:
+        cursor = None 
+        try:
+            cursor = connection.cursor()
+            print("choose number to display table : 1 - 11A, 2 - 11B, 3 - 12A, 4 - 12B")
+            while True:
+                try:
+                    choice = int(input("enter your choice: "))
+                    if 1 <= choice <= 4:
+                        break
+                    else:
+                        print("Invalid choice. Please enter a number between 1 and 4.")
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+            
+            table_map = {
+                1: "11A",
+                2: "11B",
+                3: "12A",
+                4: "12B"
+            }
+            
+            table_name = table_map[choice]
+            
+            # Execute the query for the chosen table
+            cursor.execute(f"SELECT * FROM {table_name}")
+            results = cursor.fetchall()
+            
+            print(f"\n--- Data from table: {table_name} ---")
+            
+            if results:
+                for row in results:
+                    print(row)
             else:
-                print("No data found in 11A.")
+                print(f"No data found in {table_name}.")
 
-        if choice == 2:
-            cursor.execute("SELECT * FROM 11B")
-            results_11B = cursor.fetchall()
-              print("\n--- Data from table: 11B ---")
-        if results_11B:
-            for row in results_11B:
-                print(row)
-        else:
-            print("No data found in 11B.")
-
-            if choice == 3:
-            cursor.execute("SELECT * FROM 12A")
-            results_12A = cursor.fetchall()
-             print("\n--- Data from table: 12A ---")
-        if results_12A:
-            for row in results_12A:
-                print(row)
-        else:
-            print("No data found in 12A.")
-        if choice == 4:
-            cursor.execute("SELECT * FROM 12B")
-            results_12B = cursor.fetchall()
-             print("\n--- Data from table: 12B ---")
-        if results_12B:
-            for row in results_12B:
-                print(row)
-        else:
-            print("No data found in 12B.")
-       
-    except Exception as err: 
-        print(f"Error extracting data: {err}")
-    finally:
-        cursor.close()
+        except mysql.connector.Error as err:
+             print(f"Database Error: {err}")
+        except Exception as err:
+            print(f"General Error extracting data: {err}")
+        finally:
+            if cursor:
+                cursor.close()
+    else:
+        print("Cannot extract data. Database connection is not established.")
+if __name__ == "__main__":
+    db_connection = connect_to_database()
+    if db_connection:
+        extract_data(db_connection)
+        db_connection.close() # Close the connection when done
+        print("\nDatabase connection closed.")
