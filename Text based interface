@@ -1,0 +1,60 @@
+while True:
+    print("===== Student Management System =====")
+    print("Login as:")
+    print("1. Teacher")
+    print("2. Student")
+    print("3. Exit")
+
+    user_type = input("Enter choice: ").strip()
+
+    if user_type == "1":  # Teacher/Admin
+        while True:
+            print("\n--- Teacher Menu ---")
+            print("1. Add Student")
+            print("2. View Students")
+            print("3. Calculate Grade")
+            print("4. Export to CSV")
+            print("5. Access Report")
+            print("6. Analyze Data (Charts)")
+            print("7. Generate Ranklist")
+            print("8. Back to Login Menu")
+            choice = input("Enter choice: ").strip()
+
+            if choice == "1":
+                #put the function for adding a student
+            elif choice == "2":
+                #put the function for viewing students
+            elif choice == "3":
+                grade()
+            elif choice == "4":
+                export_to_csv()
+            elif choice == "5":
+                load_classreport()
+            elif choice == "6":
+                #put the function for graphical analysis
+            elif choice == "7":
+                generate_ranklist()
+            elif choice == "8":
+                break
+            else:
+                print("Invalid choice. Try again.")
+
+    elif user_type == "2":  # Student/Viewer
+        while True:
+            print("\n--- Student Menu ---")
+            print("1. Access student report")
+            print("2. Back to Login Menu")
+            choice = input("Enter choice: ").strip()
+            if choice == "1":
+                load_studentreport()
+            elif choice == "2":
+                break
+            else:
+                print("Invalid choice. Try again.")
+
+    elif user_type == "3":  # Exit
+        print("Exiting program...")
+        break
+
+    else:
+        print("Invalid choice. Try again.")
