@@ -1,78 +1,78 @@
 # Teacher Functions
 from Databaseconnector import connect_to_database 
 import mysql.connector
-def extract_data(connection):
+#import matplotlib.pyplot
+
+def extract_data():
     """Extracts and prints data from a selected table."""
-    if connection:
-        cursor = None 
-        try:
-            cursor = connection.cursor()
-            print("choose number to display table : 1 - 11A, 2 - 11B, 3 - 12A, 4 - 12B")
-            while True:
-                try:
-                    choice = int(input("enter your choice: "))
-                    if 1 <= choice <= 4:
-                        break
-                    else:
-                        print("Invalid choice. Please enter a number between 1 and 4.")
-                except ValueError:
-                    print("Invalid input. Please enter a number.")
+
+    print("choose number to display table : 1 - 11A, 2 - 11B, 3 - 12A, 4 - 12B")
+    try:
+        choice = int(input("enter your choice: "))
+    except ValueError:
+        print("Invalid input. Please enter a number.")
             
-            table_map = {
-                1: "11A",
+    table_map = {1: "11A",
                 2: "11B",
                 3: "12A",
-                4: "12B"
-            }
+                4: "12B"}
             
-            table_name = table_map[choice]
+    kaksha = table_map[choice]
             
             # Execute the query for the chosen table
-            cursor.execute(f"SELECT * FROM {table_name}")
-            results = cursor.fetchall()
+    db=connect_to_database()
+    cursor=db.cursor()
+    cursor.execute(f"SELECT * FROM {kaksha}")
+    results = cursor.fetchall()
             
-            print(f"\n--- Data from table: {table_name} ---")
+    print(f"\n--- Data from table: {kaksha} ---")
             
-            if results:
+    if results:
                 for row in results:
                     print(row)
-            else:
-                print(f"No data found in {table_name}.")
-
-        except mysql.connector.Error as err:
-             print(f"Database Error: {err}")
-        except Exception as err:
-            print(f"General Error extracting data: {err}")
-        finally:
-            if cursor:
-                cursor.close()
     else:
-        print("Cannot extract data. Database connection is not established.")
-if __name__ == "__main__":
-    db_connection = connect_to_database()
-    if db_connection:
-        extract_data(db_connection)
-        db_connection.close() # Close the connection when done
-        print("\nDatabase connection closed.")
+                print(f"No data found in {kaksha}.")
 
+#Verified OK
+def data_entry():
+    db=connect_to_database()
+    cursor=db.cursor()
+    print('Data entry for student marks')
+    kaksha = (input('Enter class and section without space : '))
+    roll_no = int(input('Enter the roll number of the student : '))
+    name=input('Whats your good name : ')
+    p = float(input("Enter marks in Physics : "))
+    c = float(input("Enter marks in Chemistry : "))
+    m = float(input("Enter marks in Mathematics : "))    
+    e = float(input("Enter marks in English : "))
+    cs = float(input("Enter marks in Computer Science : "))  
+    data = [roll_no, name, p, c, m, cs, e]
+    query = f'''INSERT INTO {kaksha} (roll_no, name, physics, chemistry, maths, english, computerscience)
+                      VALUES (%s, %s, %s, %s, %s, %s, %s);'''
+    cursor.execute(query, data)
+    db.commit()
+
+#Verified OK
 def export_to_csv():
     import csv
-    cursor=connect_to_database.mydb.cursor()
-    cursor.execute("SELECT * FROM students")
+    db=connect_to_database()
+    cursor=db.cursor()
+    kaksha = (input('Enter class and section without space : '))
+    cursor.execute(f"SELECT * FROM {kaksha}")
     rows = cursor.fetchall()
     #Export full class report
     with open("students_report.csv", "a", newline="") as fp:
         writer = csv.writer(fp)
-        writer.writerow(["Roll No", "Name", "Grade", "Total_Marks"])  # column headers
+        writer.writerow(["Roll No", "Name", "Physics", "Chemistry", "Maths", "English", "Computer Science"])  # column headers
         writer.writerows(rows)
     print("Class csv exported as students_report.csv\n")
 
 def grade():
-    P = float(input("Enter marks in Physics"))
-    C = float(input("Enter marks in Chemistry"))
-    M = float(input("Enter marks in Mathematics"))    
-    E = float(input("Enter marks in English"))
-    CS = float(input("Enter marks in Computer Science"))  
+    P = float(input("Enter marks in Physics : "))
+    C = float(input("Enter marks in Chemistry : "))
+    M = float(input("Enter marks in Mathematics : "))    
+    E = float(input("Enter marks in English : "))
+    CS = float(input("Enter marks in Computer Science : "))  
     total=P+C+M+E+CS
     if total>=450:
         print("Grade: A")
@@ -95,8 +95,10 @@ def load_classreport():
          print("CSV file not found. Export it first.")
                 
 def generate_ranklist():
-    cursor=connect_to_database.mydb.cursor()
-    cursor.execute("SELECT roll_no, name, maths, physics, chemistry, english, computerscience FROM students")
+    db=connect_to_database()
+    cursor=db.cursor()
+    kaksha = (input('Enter class and section without space : '))
+    cursor.execute(f"SELECT roll_no, name, physics, chemistry, maths, english, computerscience FROM {kaksha}")
     rows = cursor.fetchall()
     if not rows:
         print("No student records found!")
@@ -126,11 +128,13 @@ def get_student_rank(cursor, roll_no):
     return "N/A"
 
 def load_studentreport():
-    rno=int(input("Enter your roll number: "))
+    rno=int(input("Enter your roll number : "))
     import csv
-    import matplotlib.pyplot as plt
-    cursor=connect_to_database.mydb.cursor()
-    cursor.execute("SELECT roll_no, name, maths, physics, chemistry, english, computerscience FROM students WHERE roll_no=rno")
+    #import matplotlib.pyplot as plt
+    db=connect_to_database()
+    cursor=db.cursor()
+    kaksha = (input('Enter class and section without space : '))
+    cursor.execute(f"SELECT roll_no, name, physics, chemistry, maths,  english, computerscience FROM {kaksha} WHERE roll_no={rno}")
     row = cursor.fetchone()
     if row:
         roll, name, phy, chem, math, cs, eng = row
@@ -146,13 +150,13 @@ def load_studentreport():
         #chart
         subjects = [ "Physics", "Chemistry", "Maths", "CS", "English"]
         marks = [phy, chem, math, cs, eng]
-        plt.bar(subjects, marks, color="skyblue")
+        '''plt.bar(subjects, marks, color="skyblue")
         plt.title("Performance Report - "+name)
         plt.xlabel("Subjects")
         plt.ylabel("Marks")
         plt.savefig(name+"_chart.png")
         plt.close()
-        print("Report generated: ", filename, name+"_chart.png")
+        print("Report generated: ", filename, name+"_chart.png")'''
     else:
         print("No student found with that roll number.")
 

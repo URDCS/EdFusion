@@ -1,4 +1,6 @@
 import User_Functions
+import time
+
 while True:
     print("===== Student Management System =====")
     print("Login as:")
@@ -21,9 +23,9 @@ while True:
             choice = input("Enter choice: ").strip()
 
             if choice == "1":
-                #put the function for adding a student
+                User_Functions.data_entry()
             elif choice == "2":
-                User_Functions.extract_data(connection)
+                User_Functions.extract_data()
             elif choice == "3":
                 User_Functions.grade()
             elif choice == "4":
@@ -42,7 +44,7 @@ while True:
             print("\n--- Student Menu ---")
             print("1. Access student report")
             print("2. Back to Login Menu")
-            choice = input("Enter choice: ").strip()
+            choice = input("Enter choice : ").strip()
             if choice == "1":
                 User_Functions.load_studentreport()
             elif choice == "2":
@@ -52,6 +54,7 @@ while True:
 
     elif user_type == "3":  # Exit
         print("Exiting program...")
+        time.sleep(3) #For extra dramatic effect as per hollywood standards
         break
 
     else:
