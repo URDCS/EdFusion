@@ -1,3 +1,4 @@
+import User_Functions
 while True:
     print("===== Student Management System =====")
     print("Login as:")
@@ -15,26 +16,23 @@ while True:
             print("3. Calculate Grade")
             print("4. Export to CSV")
             print("5. Access Report")
-            print("6. Analyze Data (Charts)")
-            print("7. Generate Ranklist")
-            print("8. Back to Login Menu")
+            print("6. Generate Ranklist")
+            print("7. Back to Login Menu")
             choice = input("Enter choice: ").strip()
 
             if choice == "1":
                 #put the function for adding a student
             elif choice == "2":
-                #put the function for viewing students
+                User_Functions.extract_data(connection)
             elif choice == "3":
-                grade()
+                User_Functions.grade()
             elif choice == "4":
-                export_to_csv()
+                User_Functions.export_to_csv()
             elif choice == "5":
-                load_classreport()
+                User_Functions.load_classreport()
             elif choice == "6":
-                #put the function for graphical analysis
+                User_Functions.generate_ranklist()
             elif choice == "7":
-                generate_ranklist()
-            elif choice == "8":
                 break
             else:
                 print("Invalid choice. Try again.")
@@ -46,7 +44,7 @@ while True:
             print("2. Back to Login Menu")
             choice = input("Enter choice: ").strip()
             if choice == "1":
-                load_studentreport()
+                User_Functions.load_studentreport()
             elif choice == "2":
                 break
             else:
